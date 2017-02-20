@@ -122,4 +122,21 @@ public class ApplicationTest {
         findTicket.click();
 
     }
+
+    @Test
+    public void linkedinTest() {
+        System.setProperty("webdriver.gecko.driver","/usr/bin/geckodriver");
+        WebDriver webDriver = new FirefoxDriver();
+        webDriver.get("https://www.linkedin.com/");
+
+        WebElement email = webDriver.findElement(By.id("login-email"));
+        WebElement password = webDriver.findElement(By.id("login-password"));
+        WebElement btnLogin = webDriver.findElement(By.id("login-submit"));
+
+        email.sendKeys("gurkan.cakir@engineer.com");
+        password.sendKeys("test"); //sifre guncelle
+        btnLogin.click();
+
+
+    }
 }
