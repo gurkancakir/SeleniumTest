@@ -1,8 +1,5 @@
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -120,6 +117,76 @@ public class ApplicationTest {
         }
         WebElement findTicket = webDriver.findElement(By.id("btn-find-ticket"));
         findTicket.click();
+
+        //select first car
+        webDriverWait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.cssSelector("div[data-item*='journey']"),1));
+        List<WebElement> ticketList = webDriver.findElements(By.cssSelector("div[data-item*='journey']"));
+        ticketList.get(0).click();
+
+        // select seat number
+        webDriverWait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//div[@class='bus-layout-wrap']/*[name()='svg']/*[name()='a']")));
+        List<WebElement> numbers = webDriver.findElements(By.xpath("//div[@class='bus-layout-wrap']/*[name()='svg']/*[name()='a']"));
+        WebElement number = numbers.get(0);
+        for (WebElement e: numbers) {
+            SearchContext searchContext = e;
+            if (searchContext.findElement(By.className("s-seat-n")).getText().trim().equals("7")) {
+                number = e;
+                System.out.println("if : "+searchContext.findElement(By.className("s-seat-n")).getText());
+                break;
+            }
+        }
+        ((JavascriptExecutor) webDriver).executeScript("var evt = document.createEvent('MouseEvents');" +
+                "evt.initMouseEvent('click',true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0,null);" +
+                "arguments[0].dispatchEvent(evt);", number);
+
+        // select gender
+        webDriverWait.until(ExpectedConditions.invisibilityOfElementWithText(By.className("popover"),
+                webDriver.findElement(By.className("popover")).getText()));
+        SearchContext genderArea = webDriver.findElement(By.className("popover"));
+        WebElement gender = genderArea.findElement(By.cssSelector("a[data-gender*='M']"));
+        gender.click();
+
+        // click next button
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(By.className("btn-next")));
+        WebElement nextBtn = webDriver.findElement(By.className("btn-next"));
+        nextBtn.click();
+
+        // phone
+        WebElement phone = webDriver.findElement(By.id("Phone"));
+        phone.sendKeys("5555555555");
+
+        // Email
+        WebElement email = webDriver.findElement(By.id("Email"));
+        email.sendKeys("test@test.com");
+
+        //Name
+        WebElement name = webDriver.findElement(By.cssSelector("input[id*='Name']"));
+        name.sendKeys("test yolcu");
+
+        // non turkish
+        WebElement nonTurk = webDriver.findElement(By.cssSelector("input[id*='IsNonTurkish']"));
+        nonTurk.click();
+
+        // credit card
+        WebElement creditCard = webDriver.findElement(By.id("CardNumber"));
+        creditCard.sendKeys("5571");
+        creditCard.sendKeys("1355");
+        creditCard.sendKeys("7113");
+        creditCard.sendKeys("5575");
+
+        // Expiration
+        WebElement expiration = webDriver.findElement(By.id("Expiration"));
+        expiration.sendKeys("12");
+        expiration.sendKeys("18");
+
+        // CVV
+        WebElement cvv = webDriver.findElement(By.id("CV2"));
+        cvv.sendKeys("000");
+
+        // submit button
+        WebElement submitButton = webDriver.findElement(By.className("btn-success"));
+        submitButton.click();
+
 
     }
 
